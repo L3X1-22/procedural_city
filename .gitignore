@@ -1,0 +1,412 @@
+# ============================================================
+# OS
+# ============================================================
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.stackdump
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Linux
+.directory
+.Trash-*
+.nfs*
+
+
+# ============================================================
+# Python
+# ============================================================
+
+# Bytecode / cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Python cache / tooling
+.pytest_cache/
+.mypy_cache/
+.pyre/
+.pytype/
+.ruff_cache/
+.pyright/
+.coverage
+.coverage.*
+htmlcov/
+
+# Type checking
+.dmypy.json
+dmypy.json
+
+# Profilers
+.prof
+*.lprof
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Python version managers
+.python-version.local
+
+# uv
+.uv/
+
+
+# ============================================================
+# Node / JavaScript
+# ============================================================
+
+node_modules/
+.npm/
+.pnpm-store/
+.yarn/
+.yarn-cache/
+.yarnrc
+.yarn-integrity
+
+# Build output
+.next/
+.nuxt/
+dist/
+out/
+.cache/
+.parcel-cache/
+.turbo/
+.vite/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+
+# ============================================================
+# VS Code
+# ============================================================
+
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+.history/
+*.code-workspace
+
+
+# ============================================================
+# Visual Studio
+# ============================================================
+
+.vs/
+.vscode/
+*.user
+*.userosscache
+*.suo
+*.userprefs
+*.vcxproj.user
+
+# Build output
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio caches
+.vsconfig
+
+
+# ============================================================
+# JetBrains
+# ============================================================
+
+.idea/
+*.iml
+*.iws
+*.ipr
+
+
+# ============================================================
+# Sublime Text
+# ============================================================
+
+*.sublime-workspace
+*.sublime-project
+
+
+# ============================================================
+# Vim / Neovim
+# ============================================================
+
+*.swp
+*.swo
+*.swn
+*.swn
+*~
+Session.vim
+.netrwhist
+
+
+# ============================================================
+# Emacs
+# ============================================================
+
+*~
+\#*\#
+.#*
+auto-save-list/
+tramp
+.elc
+
+
+# ============================================================
+# Zed
+# ============================================================
+
+.zed/
+
+
+# ============================================================
+# Cursor
+# ============================================================
+
+.cursor/
+
+
+# ============================================================
+# Windsurf
+# ============================================================
+
+.windsurf/
+
+
+# ============================================================
+# Eclipse
+# ============================================================
+
+.classpath
+.project
+.settings/
+
+
+# ============================================================
+# NetBeans
+# ============================================================
+
+/nbproject/private/
+/nbbuild/
+/dist/
+/.nb-gradle/
+
+
+# ============================================================
+# C / C++ build systems
+# ============================================================
+
+cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+compile_commands.json
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.dll
+*.exe
+*.out
+
+
+# ============================================================
+# Unity
+# ============================================================
+
+# Unity generated folders
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+
+# Unity generated files
+MemoryCaptures/
+Recordings/
+
+# Visual Studio / Rider generated files
+.vs/
+.idea/
+*.csproj
+*.sln
+*.slnx
+*.user
+*.userprefs
+
+# Unity addressables
+ServerData/
+
+# Unity generated metadata/cache
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+sysinfo.txt
+
+# Crash reports
+crashlytics-build.properties
+
+
+# ============================================================
+# Blender
+# ============================================================
+
+# Blender backup files
+*.blend1
+*.blend2
+*.blend3
+*.blend4
+*.blend5
+
+# Blender autosave
+*.blend@
+
+
+# ============================================================
+# Unreal Engine
+# ============================================================
+
+# If Unreal is ever used
+Binaries/
+DerivedDataCache/
+Intermediate/
+Saved/
+.vs/
+*.sln
+*.suo
+
+
+# ============================================================
+# Godot
+# ============================================================
+
+.godot/
+
+
+# ============================================================
+# Logs / temporary files
+# ============================================================
+
+*.log
+*.tmp
+*.temp
+*.bak
+*.swp
+*.pid
+
+# Temporary directories
+tmp/
+temp/
+.cache/
+
+
+# ============================================================
+# Generated files
+# ============================================================
+
+# Generic generated output
+generated/
+generated-assets/
+
+# Local exports
+exports/
+
+# Keep the project output directory itself,
+# but ignore generated files inside it.
+#
+# If generated_graph.json is intended to be versioned,
+# remove this rule.
+outputs/*
+!outputs/.gitkeep
+
+
+# ============================================================
+# Secrets / credentials
+# ============================================================
+
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+
+# Local configuration
+config.local.*
+settings.local.*
+
+
+# ============================================================
+# Database / local data
+# ============================================================
+
+*.db
+*.sqlite
+*.sqlite3
+
+# Local database folders
+data/local/
+
+
+# ============================================================
+# Coverage / reports
+# ============================================================
+
+coverage/
+.coverage
+coverage.xml
+*.lcov
+
+
+# ============================================================
+# OS / editor miscellaneous
+# ============================================================
+
+*.orig
+*.rej
+*.pid
+*.seed
+*.lock
+
+# Local project files
+local/
+.local/
