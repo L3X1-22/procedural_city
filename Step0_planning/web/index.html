@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Procedural City — Graph Viewer</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="min-h-screen">
+
+    <main class="min-h-screen flex flex-col">
+
+        <header class="px-6 py-5">
+            <div class="max-w-6xl mx-auto flex items-center justify-between gap-4">
+
+                <div>
+                    <h1 class="text-3xl font-black tracking-tight">
+                        🏙️ City Graph
+                    </h1>
+
+                    <p class="text-sm font-bold opacity-70">
+                        Step 0 · Planning
+                    </p>
+                </div>
+
+                <div class="flex items-center gap-3">
+
+                    <label
+                        for="file-input"
+                        class="cartoon-button px-5 py-3 font-black text-sm"
+                    >
+                        📂 Cargar JSON
+                    </label>
+
+                    <input
+                        id="file-input"
+                        type="file"
+                        accept=".json,application/json"
+                        class="hidden"
+                    >
+
+                    <button
+                        id="randomize-button"
+                        class="cartoon-button px-5 py-3 font-black text-sm"
+                        disabled
+                    >
+                        🎲 Organizar
+                    </button>
+
+                </div>
+
+            </div>
+        </header>
+
+
+        <section class="flex-1 px-6 pb-6">
+            <div class="max-w-6xl mx-auto h-full">
+
+                <div class="graph-card relative w-full h-[70vh] min-h-[500px] overflow-hidden">
+
+                    <svg
+                        id="graph"
+                        class="absolute inset-0 w-full h-full"
+                        viewBox="0 0 1000 600"
+                        preserveAspectRatio="none"
+                    >
+                        <g id="edges"></g>
+                        <g id="vertices"></g>
+                    </svg>
+
+                    <div
+                        id="empty-state"
+                        class="absolute inset-0 flex items-center justify-center"
+                    >
+                        <div class="text-center">
+                            <div class="text-6xl mb-4">🗺️</div>
+
+                            <h2 class="text-2xl font-black">
+                                Carga un grafo
+                            </h2>
+
+                            <p class="mt-2 text-sm font-bold opacity-60">
+                                Selecciona tu generated_graph.json
+                            </p>
+                        </div>
+                    </div>
+
+                    <div
+                        id="error"
+                        class="hidden absolute inset-0 flex items-center justify-center"
+                    >
+                        <div class="error-box max-w-md mx-6 p-6 text-center">
+
+                            <div class="text-4xl mb-3">
+                                💥
+                            </div>
+
+                            <h2 class="text-xl font-black mb-2">
+                                JSON inválido
+                            </h2>
+
+                            <p
+                                id="error-message"
+                                class="text-sm font-bold opacity-70"
+                            ></p>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <script src="index.js"></script>
+</body>
+</html>
