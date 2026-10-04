@@ -1,123 +1,425 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Procedural City — Graph Viewer</title>
+    <title>City Layout Editor</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
+
     <link rel="stylesheet" href="styles.css">
 </head>
 
-<body class="min-h-screen">
+<body class="min-h-screen bg-[#f4ead8] text-[#171717]">
 
-    <main class="min-h-screen flex flex-col">
+    <main class="mx-auto flex min-h-screen max-w-[1600px] flex-col p-4">
 
-        <header class="px-6 py-5">
-            <div class="max-w-6xl mx-auto flex items-center justify-between gap-4">
+        <!-- =====================================================
+             HEADER
+        ====================================================== -->
 
-                <div>
-                    <h1 class="text-3xl font-black tracking-tight">
-                        🏙️ City Graph
-                    </h1>
+        <header class="mb-4 flex flex-wrap items-center justify-between gap-4">
 
-                    <p class="text-sm font-bold opacity-70">
-                        Step 0 · Planning
-                    </p>
+            <div>
+                <h1 class="text-3xl font-black">
+                    🏙️ City Layout Editor
+                </h1>
+
+                <p class="mt-1 text-sm font-semibold opacity-70">
+                    Construye y modifica el grafo de la ciudad.
+                </p>
+            </div>
+
+            <div class="flex flex-wrap gap-2">
+
+                <!-- Cargar -->
+                <label for="file-input"
+                    class="cursor-pointer rounded-xl border-2 border-black bg-white px-4 py-2 font-black shadow-[4px_4px_0_#171717] transition hover:-translate-y-0.5">
+                    📂 Cargar JSON
+                </label>
+
+                <input id="file-input" type="file" accept=".json,application/json" class="hidden">
+
+                <!-- Guardar -->
+                <button id="save-button" type="button"
+                    class="rounded-xl border-2 border-black bg-[#ffcc4d] px-4 py-2 font-black shadow-[4px_4px_0_#171717] transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
+                    disabled>
+                    💾 Guardar City Layout
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <!-- =====================================================
+             TOOLBAR
+        ====================================================== -->
+
+        <section
+            class="mb-4 flex flex-wrap items-center gap-2 rounded-2xl border-2 border-black bg-[#fffaf0] p-3 shadow-[5px_5px_0_#171717]">
+
+            <span class="mr-2 font-black">
+                Herramientas:
+            </span>
+
+
+            <!-- Selección -->
+            <button id="tool-select" type="button" class="tool-button active" data-tool="select">
+                🖱️ Seleccionar
+            </button>
+
+
+            <!-- Añadir vértice -->
+            <button id="tool-add-vertex" type="button" class="tool-button" data-tool="add-vertex">
+                🟢 Añadir vértice
+            </button>
+
+
+            <!-- Eliminar vértice -->
+            <button id="tool-delete-vertex" type="button" class="tool-button" data-tool="delete-vertex">
+                ❌ Eliminar vértice
+            </button>
+
+
+            <!-- Añadir arista -->
+            <button id="tool-add-edge" type="button" class="tool-button" data-tool="add-edge">
+                🔗 Añadir arista
+            </button>
+
+
+            <!-- Eliminar arista -->
+            <button id="tool-delete-edge" type="button" class="tool-button" data-tool="delete-edge">
+                ✂️ Eliminar arista
+            </button>
+
+
+            <div class="mx-1 hidden h-8 w-px bg-black/20 md:block"></div>
+
+
+            <!-- Reset -->
+            <button id="reset-button" type="button" class="tool-button" disabled>
+                ↻ Restablecer
+            </button>
+
+        </section>
+
+
+        <!-- =====================================================
+             EDITOR
+        ====================================================== -->
+
+        <section class="grid min-h-0 flex-1 gap-4 lg:grid-cols-[1fr_280px]">
+
+
+            <!-- =================================================
+                 CANVAS
+            ================================================== -->
+
+            <div id="canvas-container"
+                class="relative min-h-[600px] overflow-hidden rounded-2xl border-2 border-black bg-[#fafafa] shadow-[6px_6px_0_#171717]">
+
+                <svg id="graph" class="absolute inset-0 h-full w-full select-none" viewBox="0 0 1000 600"
+                    preserveAspectRatio="none">
+
+                    <!-- Fondo -->
+                    <rect id="canvas-background" x="0" y="0" width="1000" height="600" fill="transparent"></rect>
+
+
+                    <!-- =================================================
+                         CUADRÍCULA
+                    ================================================== -->
+
+                    <g id="grid" pointer-events="none">
+
+                        <g id="grid-lines"></g>
+
+                        <g id="grid-labels"></g>
+
+                    </g>
+
+
+                    <!-- =================================================
+                         ARISTAS
+                    ================================================== -->
+
+                    <g id="edges"></g>
+
+
+                    <!-- =================================================
+                         VÉRTICES
+                    ================================================== -->
+
+                    <g id="vertices"></g>
+
+
+                    <!-- =================================================
+                         SELECCIÓN
+                    ================================================== -->
+
+                    <g id="selection" pointer-events="none"></g>
+
+                </svg>
+
+
+                <!-- =================================================
+                     EMPTY STATE
+                ================================================== -->
+
+                <div id="empty-state" class="pointer-events-none absolute inset-0 flex items-center justify-center">
+
+                    <div
+                        class="rounded-2xl border-2 border-black bg-white px-8 py-6 text-center shadow-[5px_5px_0_#171717]">
+
+                        <div class="text-5xl">
+                            🏙️
+                        </div>
+
+                        <h2 class="mt-3 text-xl font-black">
+                            No hay ningún mapa cargado
+                        </h2>
+
+                        <p class="mt-1 text-sm font-semibold opacity-60">
+                            Carga un generated_graph.json
+                            para comenzar.
+                        </p>
+
+                    </div>
+
                 </div>
 
-                <div class="flex items-center gap-3">
 
-                    <label
-                        for="file-input"
-                        class="cartoon-button px-5 py-3 font-black text-sm"
-                    >
-                        📂 Cargar JSON
-                    </label>
+                <!-- =================================================
+                     COORDENADAS DEL CURSOR
+                ================================================== -->
 
-                    <input
-                        id="file-input"
-                        type="file"
-                        accept=".json,application/json"
-                        class="hidden"
-                    >
+                <div id="cursor-coordinates"
+                    class="pointer-events-none absolute bottom-3 left-3 rounded-lg border-2 border-black bg-white px-3 py-1 font-mono text-xs font-bold shadow-[3px_3px_0_#171717]">
+                    X: 0.00&nbsp;&nbsp;Y: 0.00
+                </div>
 
-                    <button
-                        id="randomize-button"
-                        class="cartoon-button px-5 py-3 font-black text-sm"
-                        disabled
-                    >
-                        🎲 Organizar
+
+                <!-- =================================================
+                     ZOOM
+                ================================================== -->
+
+                <div class="absolute bottom-3 right-3 flex items-center gap-2">
+
+                    <button id="zoom-out" type="button" class="zoom-button" title="Alejar">
+                        −
+                    </button>
+
+                    <span id="zoom-level"
+                        class="min-w-[65px] rounded-lg border-2 border-black bg-white px-2 py-1 text-center font-mono text-xs font-black shadow-[3px_3px_0_#171717]">
+                        100%
+                    </span>
+
+                    <button id="zoom-in" type="button" class="zoom-button" title="Acercar">
+                        +
+                    </button>
+
+                    <button id="zoom-reset" type="button" class="zoom-button text-xs" title="Restablecer zoom">
+                        1:1
                     </button>
 
                 </div>
 
+
+                <!-- =================================================
+                     TOOL INFO
+                ================================================== -->
+
             </div>
-        </header>
 
 
-        <section class="flex-1 px-6 pb-6">
-            <div class="max-w-6xl mx-auto h-full">
+            <!-- =====================================================
+                 SIDEBAR
+            ====================================================== -->
 
-                <div class="graph-card relative w-full h-[70vh] min-h-[500px] overflow-hidden">
+            <aside class="flex flex-col gap-4">
 
-                    <svg
-                        id="graph"
-                        class="absolute inset-0 w-full h-full"
-                        viewBox="0 0 1000 600"
-                        preserveAspectRatio="none"
-                    >
-                        <g id="edges"></g>
-                        <g id="vertices"></g>
-                    </svg>
 
-                    <div
-                        id="empty-state"
-                        class="absolute inset-0 flex items-center justify-center"
-                    >
-                        <div class="text-center">
-                            <div class="text-6xl mb-4">🗺️</div>
+                <!-- =================================================
+                     ESTADO DEL GRAFO
+                ================================================== -->
 
-                            <h2 class="text-2xl font-black">
-                                Carga un grafo
-                            </h2>
+                <section class="rounded-2xl border-2 border-black bg-white p-4 shadow-[5px_5px_0_#171717]">
 
-                            <p class="mt-2 text-sm font-bold opacity-60">
-                                Selecciona tu generated_graph.json
-                            </p>
+                    <h2 class="mb-3 text-lg font-black">
+                        📊 City Layout
+                    </h2>
+
+
+                    <div class="grid grid-cols-2 gap-2">
+
+                        <div class="stat-box">
+                            <span class="stat-label">
+                                Vértices
+                            </span>
+
+                            <span id="vertex-count" class="stat-value">
+                                0
+                            </span>
                         </div>
+
+
+                        <div class="stat-box">
+                            <span class="stat-label">
+                                Aristas
+                            </span>
+
+                            <span id="edge-count" class="stat-value">
+                                0
+                            </span>
+                        </div>
+
                     </div>
 
-                    <div
-                        id="error"
-                        class="hidden absolute inset-0 flex items-center justify-center"
-                    >
-                        <div class="error-box max-w-md mx-6 p-6 text-center">
+                </section>
 
-                            <div class="text-4xl mb-3">
-                                💥
+
+                <!-- =================================================
+                     ELEMENTO SELECCIONADO
+                ================================================== -->
+
+                <section id="selection-panel"
+                    class="rounded-2xl border-2 border-black bg-white p-4 shadow-[5px_5px_0_#171717]">
+
+                    <h2 class="mb-3 text-lg font-black">
+                        🔎 Selección
+                    </h2>
+
+                    <div id="selection-empty" class="text-sm font-semibold opacity-60">
+                        No hay ningún elemento seleccionado.
+                    </div>
+
+
+                    <div id="vertex-info" class="hidden">
+
+                        <div class="mb-3 text-sm">
+                            Vértice
+                            <strong id="selected-vertex-id">
+                                —
+                            </strong>
+                        </div>
+
+
+                        <div class="grid grid-cols-2 gap-2">
+
+                            <div class="coordinate-box">
+                                <span>X</span>
+
+                                <strong id="selected-vertex-x">
+                                    —
+                                </strong>
                             </div>
 
-                            <h2 class="text-xl font-black mb-2">
-                                JSON inválido
-                            </h2>
+                            <div class="coordinate-box">
+                                <span>Y</span>
 
-                            <p
-                                id="error-message"
-                                class="text-sm font-bold opacity-70"
-                            ></p>
+                                <strong id="selected-vertex-y">
+                                    —
+                                </strong>
+                            </div>
 
                         </div>
+
                     </div>
 
-                </div>
 
-            </div>
+                    <div id="edge-info" class="hidden">
+
+                        <div class="text-sm">
+                            Arista
+                        </div>
+
+                        <div id="selected-edge" class="mt-2 rounded-lg bg-black/5 p-2 font-mono text-sm font-bold">
+                            —
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =================================================
+                     INSTRUCCIONES
+                ================================================== -->
+
+                <section class="rounded-2xl border-2 border-black bg-[#fff3c4] p-4 shadow-[5px_5px_0_#171717]">
+
+                    <h2 class="mb-3 text-lg font-black">
+                        🎮 Controles
+                    </h2>
+
+                    <ul class="space-y-2 text-sm font-semibold">
+
+                        <li>
+                            🖱️ <strong>Click:</strong>
+                            seleccionar
+                        </li>
+
+                        <li>
+                            🖱️ <strong>Arrastrar:</strong>
+                            mover vértice
+                        </li>
+
+                        <li>
+                            🖱️ <strong>Rueda:</strong>
+                            zoom
+                        </li>
+
+                        <li>
+                            ✋ <strong>Arrastrar fondo:</strong>
+                            mover cámara
+                        </li>
+
+                        <li>
+                            🔗 <strong>Añadir arista:</strong>
+                            selecciona dos vértices
+                        </li>
+
+                        <li>
+                            ✂️ <strong>Eliminar arista:</strong>
+                            selecciona una línea
+                        </li>
+
+                    </ul>
+
+                </section>
+
+
+                <!-- =================================================
+                     ERROR
+                ================================================== -->
+
+                <section id="error"
+                    class="hidden rounded-2xl border-2 border-black bg-[#ff7777] p-4 shadow-[5px_5px_0_#171717]">
+
+                    <h2 class="font-black">
+                        ⚠️ Error
+                    </h2>
+
+                    <p id="error-message" class="mt-1 text-sm font-semibold"></p>
+
+                </section>
+
+            </aside>
+
         </section>
 
     </main>
 
-    <script src="index.js"></script>
+
+    <!-- =========================================================
+         JAVASCRIPT
+    ========================================================== -->
+
+    <script type="module" src="js/main.js"></script>
+
 </body>
+
 </html>

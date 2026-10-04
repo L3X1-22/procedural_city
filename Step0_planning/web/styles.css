@@ -1,81 +1,545 @@
-:root {
-    font-family: "Comic Sans MS", "Trebuchet MS", sans-serif;
+/*
+ * ============================================================
+ * styles.css
+ * ============================================================
+ */
+
+* {
+    box-sizing: border-box;
 }
+
+
+html,
+body {
+    margin: 0;
+    min-height: 100%;
+}
+
 
 body {
-    background: #fff4d6;
-    color: #282828;
+    font-family:
+        "Trebuchet MS",
+        Arial,
+        sans-serif;
 }
 
-.graph-card {
-    background: #fffdf5;
-    border: 4px solid #282828;
-    border-radius: 28px;
-    box-shadow: 10px 10px 0 #282828;
-}
 
-.cartoon-button {
-    background: #ffcf4a;
-    border: 3px solid #282828;
-    border-radius: 16px;
-    box-shadow: 5px 5px 0 #282828;
+/*
+ * ============================================================
+ * TOOL BUTTONS
+ * ============================================================
+ */
+
+.tool-button {
+    border: 2px solid #171717;
+
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    padding: 8px 12px;
+
+    font-size: 13px;
+
+    font-weight: 900;
+
+    box-shadow:
+        3px 3px 0 #171717;
+
     cursor: pointer;
 
     transition:
-        transform 0.1s ease,
-        box-shadow 0.1s ease;
+        transform 80ms ease,
+        box-shadow 80ms ease,
+        background 80ms ease;
 }
 
-.cartoon-button:hover:not(:disabled) {
-    transform: translate(-2px, -2px);
-    box-shadow: 7px 7px 0 #282828;
+
+.tool-button:hover {
+    transform: translate(
+        -1px,
+        -1px
+    );
+
+    box-shadow:
+        4px 4px 0 #171717;
 }
 
-.cartoon-button:active:not(:disabled) {
-    transform: translate(3px, 3px);
-    box-shadow: 2px 2px 0 #282828;
+
+.tool-button:active {
+    transform: translate(
+        2px,
+        2px
+    );
+
+    box-shadow:
+        1px 1px 0 #171717;
 }
 
-.cartoon-button:disabled {
-    opacity: 0.4;
+
+.tool-button.active {
+    background: #ffcc4d;
+}
+
+
+.tool-button:disabled {
+    opacity: 0.45;
+
     cursor: not-allowed;
+
+    transform: none;
+
+    box-shadow:
+        2px 2px 0 #171717;
 }
 
-.edge {
-    stroke: #282828;
-    stroke-width: 4;
-    stroke-linecap: round;
-    pointer-events: none;
+
+/*
+ * ============================================================
+ * CANVAS
+ * ============================================================
+ */
+
+#canvas-container {
+    touch-action: none;
 }
 
-.vertex {
-    fill: #ff6b6b;
-    stroke: #282828;
-    stroke-width: 4;
+
+#graph {
+    width: 100%;
+    height: 100%;
+
+    touch-action: none;
+
+    cursor: crosshair;
+}
+
+
+#canvas-background {
     cursor: grab;
 }
 
-.vertex:hover {
-    fill: #ff8787;
-}
 
-.vertex.dragging {
+#canvas-background:active {
     cursor: grabbing;
 }
 
-.vertex-label {
-    fill: #282828;
-    font-size: 16px;
-    font-weight: 900;
-    text-anchor: middle;
-    dominant-baseline: central;
+
+/*
+ * ============================================================
+ * GRID
+ * ============================================================
+ */
+
+.grid-line {
+    stroke: #171717;
+
+    stroke-width: 0.7;
+
+    opacity: 0.09;
+
+    vector-effect: non-scaling-stroke;
+}
+
+
+.grid-axis {
+    stroke-width: 1.5;
+
+    opacity: 0.22;
+}
+
+
+.grid-label {
+    fill: #171717;
+
+    font-family:
+        "Courier New",
+        monospace;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    opacity: 0.4;
+
     pointer-events: none;
+
     user-select: none;
 }
 
-.error-box {
-    background: #ffb3b3;
-    border: 4px solid #282828;
-    border-radius: 20px;
-    box-shadow: 7px 7px 0 #282828;
+
+/*
+ * ============================================================
+ * EDGES
+ * ============================================================
+ */
+
+.edge {
+    stroke: #171717;
+
+    stroke-linecap: round;
+
+    opacity: 0.55;
+
+    fill: none;
+
+    pointer-events: stroke;
+
+    cursor: pointer;
+
+    transition:
+        opacity 80ms ease,
+        stroke 80ms ease;
+}
+
+
+.edge:hover,
+.edge-hover {
+    stroke: #ff5757;
+
+    opacity: 1;
+}
+
+
+.edge-selected {
+    stroke: #2563eb;
+
+    opacity: 1;
+
+    filter:
+        drop-shadow(
+            0 0 3px
+            rgba(37, 99, 235, 0.45)
+        );
+}
+
+
+/*
+ * ============================================================
+ * VERTICES
+ * ============================================================
+ */
+
+.vertex-group {
+    cursor: grab;
+}
+
+
+.vertex-group:active {
+    cursor: grabbing;
+}
+
+
+.vertex {
+    fill: #d93636;
+
+    stroke: #171717;
+
+    stroke-width: 2;
+
+    vector-effect: non-scaling-stroke;
+
+    cursor: grab;
+
+    transition:
+        fill 80ms ease,
+        stroke-width 80ms ease;
+}
+
+
+.vertex-group:hover .vertex {
+    fill: #ff5757;
+
+    stroke-width: 3;
+}
+
+
+.vertex-hover .vertex {
+    fill: #ff5757;
+}
+
+
+.vertex-selected .vertex {
+    fill: #ffcc4d;
+
+    stroke: #171717;
+
+    stroke-width: 3;
+}
+
+
+/*
+ * ============================================================
+ * VERTEX LABEL
+ * ============================================================
+ */
+
+.vertex-label {
+    display: none;
+
+    fill: #171717;
+
+    font-family:
+        "Comic Sans MS",
+        "Trebuchet MS",
+        sans-serif;
+
+    font-size: 12px;
+
+    font-weight: 900;
+
+    text-anchor: middle;
+
+    dominant-baseline: middle;
+
+    pointer-events: none;
+
+    user-select: none;
+}
+
+
+.vertex-group:hover .vertex-label,
+.vertex-selected .vertex-label {
+    display: block;
+}
+
+
+/*
+ * ============================================================
+ * COORDENADAS
+ * ============================================================
+ */
+
+.coordinate-label {
+    display: none;
+
+    fill: #171717;
+
+    font-family:
+        "Courier New",
+        monospace;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    pointer-events: none;
+
+    user-select: none;
+
+    paint-order: stroke;
+
+    stroke: #fafafa;
+
+    stroke-width: 3px;
+
+    stroke-linejoin: round;
+}
+
+
+.vertex-group:hover .coordinate-label,
+.vertex-selected .coordinate-label {
+    display: block;
+}
+
+
+/*
+ * ============================================================
+ * SELECTION RING
+ * ============================================================
+ */
+
+.selection-ring {
+    fill: none;
+
+    stroke: #2563eb;
+
+    stroke-width: 2;
+
+    stroke-dasharray: 5 4;
+
+    opacity: 0.9;
+
+    vector-effect: non-scaling-stroke;
+
+    animation:
+        selection-pulse 1s linear infinite;
+}
+
+
+@keyframes selection-pulse {
+
+    0% {
+        opacity: 0.9;
+    }
+
+    50% {
+        opacity: 0.45;
+    }
+
+    100% {
+        opacity: 0.9;
+    }
+}
+
+
+/*
+ * ============================================================
+ * ZOOM BUTTONS
+ * ============================================================
+ */
+
+.zoom-button {
+    width: 34px;
+
+    height: 34px;
+
+    border: 2px solid #171717;
+
+    border-radius: 9px;
+
+    background: #ffffff;
+
+    font-size: 18px;
+
+    font-weight: 900;
+
+    line-height: 1;
+
+    box-shadow:
+        3px 3px 0 #171717;
+
+    cursor: pointer;
+
+    transition:
+        transform 80ms ease,
+        box-shadow 80ms ease;
+}
+
+
+.zoom-button:hover {
+    transform:
+        translate(-1px, -1px);
+
+    box-shadow:
+        4px 4px 0 #171717;
+}
+
+
+.zoom-button:active {
+    transform:
+        translate(2px, 2px);
+
+    box-shadow:
+        1px 1px 0 #171717;
+}
+
+
+/*
+ * ============================================================
+ * STATS
+ * ============================================================
+ */
+
+.stat-box {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 2px;
+
+    border: 2px solid #171717;
+
+    border-radius: 10px;
+
+    background: #fffaf0;
+
+    padding: 8px;
+}
+
+
+.stat-label {
+    font-size: 11px;
+
+    font-weight: 800;
+
+    opacity: 0.55;
+}
+
+
+.stat-value {
+    font-size: 22px;
+
+    font-weight: 900;
+}
+
+
+/*
+ * ============================================================
+ * COORDINATE BOX
+ * ============================================================
+ */
+
+.coordinate-box {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 2px;
+
+    border-radius: 8px;
+
+    background: #f1f1f1;
+
+    padding: 8px;
+}
+
+
+.coordinate-box span {
+    font-size: 10px;
+
+    font-weight: 900;
+
+    opacity: 0.55;
+}
+
+
+.coordinate-box strong {
+    font-family:
+        "Courier New",
+        monospace;
+
+    font-size: 13px;
+}
+
+
+/*
+ * ============================================================
+ * SCROLLBAR
+ * ============================================================
+ */
+
+::-webkit-scrollbar {
+    width: 10px;
+
+    height: 10px;
+}
+
+
+::-webkit-scrollbar-track {
+    background: #e5d8c4;
+}
+
+
+::-webkit-scrollbar-thumb {
+    border: 2px solid #e5d8c4;
+
+    border-radius: 999px;
+
+    background: #171717;
+}
+
+
+::-webkit-scrollbar-thumb:hover {
+    background: #444444;
 }
